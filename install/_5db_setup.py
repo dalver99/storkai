@@ -12,6 +12,7 @@ import sys
 
 
 def configure_database(language_choice: str) -> None:
+    print("--------------------------------")
     print(
         "Choose which database to use: "
         if language_choice == "1"
@@ -87,7 +88,6 @@ def configure_database(language_choice: str) -> None:
         print("SQLite 데이터베이스 정보가 .env에 저장되었습니다.")
 
     # Create the database and table as before
-    os.system(f"sqlite3 {database_name}")
     if language_choice == "1":
         print(f"SQLite database created: {database_name}")
     else:

@@ -9,11 +9,16 @@
 
 import os
 import sys
-import openai
+from openai import OpenAI
 
 
 def configure_openai(language_choice: str) -> None:
-    print("Choose which AI to use: " if language_choice == "1" else "사용하실 AI를 선택해주세요: ")
+    print("--------------------------------")
+    print(
+        "Choose which AI to use: "
+        if language_choice == "1"
+        else "사용하실 AI를 선택해주세요: "
+    )
     print("1. OpenAI")
     ai_choice = input(
         "Enter the number of the AI you want to use: "
@@ -22,25 +27,35 @@ def configure_openai(language_choice: str) -> None:
     )
 
     if ai_choice not in ("1", "OpenAI"):
-        print("Invalid choice" if language_choice == "1" else "올바르지 않은 선택입니다.")
+        print(
+            "Invalid choice" if language_choice == "1" else "올바르지 않은 선택입니다."
+        )
         sys.exit(1)
-
-    if language_choice == "1":
-        print("You have chosen OpenAI")
-    else:
-        print("OpenAI를 선택하셨습니다.")
 
     openai_api_key = input("Enter your API key for OpenAI: ")
     if not openai_api_key.startswith("sk-") or openai_api_key == "":
-        print("❌ Invalid OpenAI key format." if language_choice == "1" else "❌ OpenAI 키 형식이 올바르지 않습니다.")
+        print(
+            "❌ Invalid OpenAI key format."
+            if language_choice == "1"
+            else "❌ OpenAI 키 형식이 올바르지 않습니다."
+        )
         sys.exit(1)
 
     try:
-        openai.api_key = openai_api_key
-        openai.models.list()
-        print("OpenAI API key is valid!" if language_choice == "1" else "OpenAI 키가 유효합니다!")
-    except Exception:
-        print("❌ Invalid OpenAI key." if language_choice == "1" else "❌ OpenAI 키가 유효하지 않습니다.")
+        client = OpenAI(api_key=openai_api_key)
+        client.models.list()
+        print(
+            "OpenAI API key is valid!"
+            if language_choice == "1"
+            else "OpenAI 키가 유효합니다!"
+        )
+    except Exception as e:
+        print(
+            "❌ Invalid OpenAI key."
+            if language_choice == "1"
+            else "❌ OpenAI 키가 유효하지 않습니다."
+        )
+        print("Error: " + str(e))
         sys.exit(1)
 
     lines: list[str] = []
@@ -65,5 +80,3 @@ def configure_openai(language_choice: str) -> None:
         print(f"OpenAI API key saved to .env: {openai_api_key[:5]}...")
     else:
         print(f"OpenAI 키가 .env에 저장되었습니다: {openai_api_key[:5]}...")
-
-

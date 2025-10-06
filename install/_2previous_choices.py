@@ -30,12 +30,13 @@ def _parse_env(lines: list[str]) -> Dict[str, str]:
 
 
 def maybe_use_previous_choices(language_choice: str) -> Tuple[bool, Dict[str, str]]:
+    print("--------------------------------")
     if not os.path.exists(".env"):
         return False, {}
 
     if language_choice == "1":
         print(".. Previous choices found!")
-        prompt = "Do you want to use the previous choices? WARNING: Choosing no will reset existing SQLite database! (y/n): "
+        prompt = "Do you want to use the previous choices? \n WARNING: Choosing no will reset existing SQLite database! (y/n): "
     else:
         print(".. 이전 환경 세팅이 있습니다!")
         prompt = "이전 환경 세팅을 사용하시겠습니까? 경고: 아니오를 선택하면 기존 SQLite 데이터베이스가 초기화됩니다! (y/n): "

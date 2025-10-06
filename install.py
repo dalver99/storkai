@@ -7,11 +7,11 @@
 ###############################################
 
 import sys
-from install.language import choose_language, greet
-from install.previous_choices import maybe_use_previous_choices
-from install.openai_setup import configure_openai
-from install.dart_setup import configure_dart
-from install.db_setup import configure_database
+from install._1greetingsnlanguage import choose_language, greet
+from install._2previous_choices import maybe_use_previous_choices
+from install._3openai_setup import configure_openai
+from install._4dart_setup import configure_dart
+from install._5db_setup import configure_database
 
 
 # Choose language and greet
