@@ -4,7 +4,7 @@ import streamlit as st
 from dotenv import load_dotenv
 
 
-def check_env_vars():
+def check_essential_env_vars():
     load_dotenv()
     required_env_vars = [
         "DART_API_KEY",
