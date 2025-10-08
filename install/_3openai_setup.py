@@ -12,7 +12,15 @@ import sys
 from openai import OpenAI
 
 
-def configure_openai(language_choice: str) -> None:
+def configure_openai() -> None:
+    # fetch language choice from .env
+    with open(".env", "r") as f:
+        lines = f.readlines()
+    language_choice = (
+        [line for line in lines if line.startswith("LANGUAGE_CHOICE=")][0]
+        .split("=")[1]
+        .strip()
+    )
     print("--------------------------------")
     print(
         "Choose which AI to use: "

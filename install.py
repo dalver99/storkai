@@ -19,15 +19,15 @@ language_choice = choose_language()
 greet(language_choice)
 
 # Offer to reuse previous choices from .env
-used_previous, _values = maybe_use_previous_choices(language_choice)
+used_previous, _values = maybe_use_previous_choices()
 
 if used_previous:
     pass
 else:
-    configure_openai(language_choice)
-    configure_dart(language_choice)
-    configure_database(language_choice)
-    create_table(language_choice)
+    configure_openai()
+    configure_dart()
+    configure_database()
+    create_table()
 
 print("Install is complete!" if language_choice == "1" else "설치가 완료되었습니다.")
 print(

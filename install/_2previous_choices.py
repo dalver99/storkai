@@ -29,7 +29,17 @@ def _parse_env(lines: list[str]) -> Dict[str, str]:
     return values
 
 
-def maybe_use_previous_choices(language_choice: str) -> Tuple[bool, Dict[str, str]]:
+def maybe_use_previous_choices() -> Tuple[bool, Dict[str, str]]:
+
+    # fetch language choice from .env
+    with open(".env", "r") as f:
+        lines = f.readlines()
+    language_choice = (
+        [line for line in lines if line.startswith("LANGUAGE_CHOICE=")][0]
+        .split("=")[1]
+        .strip()
+    )
+
     print("--------------------------------")
     if not os.path.exists(".env"):
         return False, {}

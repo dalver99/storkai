@@ -30,7 +30,15 @@ def _test_dart_api_key(api_key: str) -> bool:
     return False
 
 
-def configure_dart(language_choice: str) -> None:
+def configure_dart() -> None:
+    # fetch language choice from .env
+    with open(".env", "r") as f:
+        lines = f.readlines()
+    language_choice = (
+        [line for line in lines if line.startswith("LANGUAGE_CHOICE=")][0]
+        .split("=")[1]
+        .strip()
+    )
     print("--------------------------------")
     dart_api_key = input("Enter your API key for DART: ")
     if dart_api_key == "" or len(dart_api_key) < 40:

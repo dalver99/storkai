@@ -18,12 +18,27 @@ def choose_language() -> str:
     )
     if language_choice == "1" or language_choice == "English":
         print("You have chosen English..")
+        # Save language choice to .env, override if exists
+        with open(".env", "r") as f:
+            lines = f.readlines()
+        lines = [line for line in lines if not line.startswith("LANGUAGE_CHOICE=")]
+        lines.append("LANGUAGE_CHOICE=1\n")
+        with open(".env", "w") as f:
+            f.writelines(lines)
         return "1"
-    if language_choice == "2" or language_choice == "Korean":
+    elif language_choice == "2" or language_choice == "Korean":
         print("한국어를 선택하셨습니다..")
+        # Save language choice to .env, override if exists
+        with open(".env", "r") as f:
+            lines = f.readlines()
+        lines = [line for line in lines if not line.startswith("LANGUAGE_CHOICE=")]
+        lines.append("LANGUAGE_CHOICE=2\n")
+        with open(".env", "w") as f:
+            f.writelines(lines)
         return "2"
-
-    print("Please try again.\n다시 시도해주세요.\n")
+    else:
+        print("Please try again.\n다시 시도해주세요.\n")
+        return choose_language()
 
 
 def greet(language_choice: str) -> None:
