@@ -40,7 +40,11 @@ def configure_openai() -> None:
         )
         sys.exit(1)
 
-    openai_api_key = input("Enter your API key for OpenAI: ")
+    openai_api_key = input(
+        "Enter your API key for OpenAI: "
+        if language_choice == "1"
+        else "OpenAI 키를 입력해주세요: "
+    )
     if not openai_api_key.startswith("sk-") or openai_api_key == "":
         print(
             "❌ Invalid OpenAI key format."

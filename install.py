@@ -12,6 +12,7 @@ from install._2previous_choices import maybe_use_previous_choices
 from install._3openai_setup import configure_openai
 from install._4dart_setup import configure_dart
 from install._5db_setup import configure_database, create_table
+from install._6db_populate import fill_db_with_stock_code_and_company_name
 
 
 # Choose language and greet
@@ -28,6 +29,7 @@ else:
     configure_dart()
     configure_database()
     create_table()
+    fill_db_with_stock_code_and_company_name()
 
 print("Install is complete!" if language_choice == "1" else "설치가 완료되었습니다.")
 print(

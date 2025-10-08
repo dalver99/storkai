@@ -40,7 +40,11 @@ def configure_dart() -> None:
         .strip()
     )
     print("--------------------------------")
-    dart_api_key = input("Enter your API key for DART: ")
+    dart_api_key = input(
+        "Enter your API key for DART: "
+        if language_choice == "1"
+        else "DART API 키를 입력해주세요: "
+    )
     if dart_api_key == "" or len(dart_api_key) < 40:
         print(
             "❌ Invalid DART API key format."
