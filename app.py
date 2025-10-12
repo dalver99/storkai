@@ -25,9 +25,9 @@ st.write("---")
 if check_essential_env_vars():
     st.toast(
         (
-            "All required variables are set"
+            "All required variables are set!"
             if language_choice == "1"
-            else "모든 필수 변수가 설정되었습니다"
+            else "모든 필수 변수가 설정되었습니다!"
         ),
         icon="🎉",
     )
