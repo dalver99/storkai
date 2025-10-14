@@ -158,11 +158,34 @@ def sql_table_creation(database_name: str) -> None:
     # if not, exit
     if len(tables) != 0:
         print(
-            f"Database {database_name} is not empty. Stopping table creation."
+            f"Database {database_name} is not empty. Do you want to remove {database_name} and continue? This action is irreversible. (y/n):"
             if language_choice == "1"
-            else f"데이터베이스 {database_name}가 비어있지 않습니다. 삭제 후 다시 시작해주세요."
+            else f"데이터베이스 {database_name}가 비어있지 않습니다. {database_name}을(를) 삭제하고 계속하시겠습니까? 이 작업은 되돌릴 수 없습니다. (y/n):"
         )
-        sys.exit(0)
+        choice = input().strip().lower()
+        if choice == "y":
+            import os
+            try:
+                os.remove(database_name)
+                print(
+                    f"{database_name} has been removed. Continuing with installation..."
+                    if language_choice == "1"
+                    else f"{database_name}이(가) 삭제되었습니다. 설치를 계속합니다..."
+                )
+            except Exception as e:
+                print(
+                    f"Failed to remove {database_name}: {str(e)}"
+                    if language_choice == "1"
+                    else f"{database_name} 삭제에 실패했습니다: {str(e)}"
+                )
+                sys.exit(1)
+        else:
+            print(
+                f"Please remove {database_name} manually and run the installer again. Installation will now stop."
+                if language_choice == "1"
+                else f"{database_name}을(를) 수동으로 삭제한 후 설치 프로그램을 다시 실행해주세요. 설치를 중단합니다."
+            )
+            sys.exit(0)
     else:
         print(
             f"Database {database_name} is empty. Creating table..."
@@ -201,6 +224,16 @@ def sql_table_creation(database_name: str) -> None:
     CREATE INDEX IF NOT EXISTS idx_price_history_corp_code ON price_history(corp_code);
     """
     conn.execute(create_index_sql)
+    conn.commit()
+
+    #Create a favorite stocks table
+    create_favorite_stocks_table_sql = """
+    CREATE TABLE IF NOT EXISTS favorite_stocks (
+        corp_code TEXT PRIMARY KEY,
+        FOREIGN KEY (corp_code) REFERENCES company_info(corp_code)
+    );
+    """
+    conn.execute(create_favorite_stocks_table_sql)
     conn.commit()
 
     conn.close()

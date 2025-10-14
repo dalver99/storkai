@@ -19,8 +19,12 @@ def choose_language() -> str:
     if language_choice == "1" or language_choice == "English":
         print("You have chosen English..")
         # Save language choice to .env, override if exists
-        with open(".env", "r") as f:
-            lines = f.readlines()
+        # Well it shouldnt exist .. you're too fast
+        try:
+            with open(".env", "r") as f:
+                lines = []
+        except FileNotFoundError:
+            lines = []
         lines = [line for line in lines if not line.startswith("LANGUAGE_CHOICE=")]
         lines.append("LANGUAGE_CHOICE=1\n")
         with open(".env", "w") as f:
@@ -29,8 +33,11 @@ def choose_language() -> str:
     elif language_choice == "2" or language_choice == "Korean":
         print("한국어를 선택하셨습니다..")
         # Save language choice to .env, override if exists
-        with open(".env", "r") as f:
-            lines = f.readlines()
+        try:
+            with open(".env", "r") as f:
+                lines = []
+        except FileNotFoundError:
+            lines = []
         lines = [line for line in lines if not line.startswith("LANGUAGE_CHOICE=")]
         lines.append("LANGUAGE_CHOICE=2\n")
         with open(".env", "w") as f:
