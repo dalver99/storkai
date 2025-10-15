@@ -2,7 +2,7 @@
 import os
 import streamlit as st
 from dotenv import load_dotenv
-
+from utils.sqlite import query_db_and_close
 
 def check_essential_env_vars():
     load_dotenv()
@@ -35,3 +35,12 @@ def check_essential_env_vars():
         )
 
     return all_good
+
+def check_if_favorite_stock_exists():
+    load_dotenv()
+    language_choice = os.getenv("LANGUAGE_CHOICE")
+    favorite_stocks = query_db_and_close("SELECT * FROM favorite_stocks")
+    if len(favorite_stocks) == 0:
+        # st.error("No favorite stocks found" if language_choice == "1" else "관심 종목이 없습니다.")
+        return False
+    return True

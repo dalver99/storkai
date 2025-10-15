@@ -4,6 +4,7 @@ import streamlit as st
 from dotenv import load_dotenv
 from utils.check import check_essential_env_vars
 from utils.ui import hide_sidebar
+from utils.check import check_if_favorite_stock_exists
 
 load_dotenv()
 st.set_page_config(layout="wide", page_title="Stork")
@@ -31,6 +32,15 @@ if check_essential_env_vars():
         ),
         icon="🎉",
     )
+    if not check_if_favorite_stock_exists():
+        st.toast(
+            (
+                "No favorite stocks found! Please add a stock to your favorites first."
+                if language_choice == "1"
+                else "관심 종목이 없습니다! 우선 관심 종목에 종목을 추가하세요."
+            ),
+            icon="🚨",
+        )
 
     # Show page navigation buttons at the top of the main page instead of the sidebar
     col1, col2, col3 = st.columns(3)
