@@ -7,7 +7,7 @@ from utils.ui import hide_sidebar
 from utils.check import check_if_favorite_stock_exists
 
 load_dotenv()
-st.set_page_config(layout="wide", page_title="Stork")
+st.set_page_config( page_title="Stork")
 
 # Hide the default sidebar
 hide_sidebar()

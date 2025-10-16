@@ -12,3 +12,7 @@ def hide_sidebar():
     """,
         unsafe_allow_html=True,
     )
+
+def home_button(language_choice):
+    if st.button("Home" if language_choice == "1" else "홈", key="home_button"):
+        st.switch_page("app.py")
