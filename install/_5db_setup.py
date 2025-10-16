@@ -206,22 +206,22 @@ def sql_table_creation(database_name: str) -> None:
     conn.execute(create_company_info_table_sql)
     conn.commit()
 
-    # Create price history table with sqlite3, with corp_code as index, corp_code from company info as FK
+    # Create price history table with sqlite3, with stock_code as index, stock_code from company info as FK
     create_price_history_table_sql = """
     CREATE TABLE IF NOT EXISTS price_history (
-        corp_code TEXT NOT NULL,
+        stock_code TEXT NOT NULL,
         price REAL,
         date TEXT NOT NULL,
         volume INTEGER,
-        UNIQUE(corp_code, date),
-        FOREIGN KEY (corp_code) REFERENCES company_info(corp_code)
+        UNIQUE(stock_code, date),
+        FOREIGN KEY (stock_code) REFERENCES company_info(stock_code)
     );
     """
     conn.execute(create_price_history_table_sql)
     conn.commit()
 
     create_index_sql = """
-    CREATE INDEX IF NOT EXISTS idx_price_history_corp_code ON price_history(corp_code);
+    CREATE INDEX IF NOT EXISTS idx_price_history_stock_code ON price_history(stock_code);
     """
     conn.execute(create_index_sql)
     conn.commit()
@@ -229,8 +229,8 @@ def sql_table_creation(database_name: str) -> None:
     #Create a favorite stocks table
     create_favorite_stocks_table_sql = """
     CREATE TABLE IF NOT EXISTS favorite_stocks (
-        corp_code TEXT PRIMARY KEY,
-        FOREIGN KEY (corp_code) REFERENCES company_info(corp_code)
+        stock_code TEXT PRIMARY KEY,    
+        FOREIGN KEY (stock_code) REFERENCES company_info(stock_code)
     );
     """
     conn.execute(create_favorite_stocks_table_sql)

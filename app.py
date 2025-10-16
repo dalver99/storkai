@@ -57,10 +57,13 @@ if check_essential_env_vars():
     st.write("---")
     # footer
 
-    col4, col5 = st.columns(2)
+    col4, col5, col6 = st.columns(3)
     with col4:
         if st.button("🛠️ Settings" if language_choice == "1" else "🛠️ 설정"):
             st.switch_page("pages/settings.py")
     with col5:
         if st.button("💡 About" if language_choice == "1" else "💡 정보"):
             st.switch_page("pages/about.py")
+    with col6:
+        if st.button("🐛 Debug" if language_choice == "1" else "🐛 디버그"):
+            st.switch_page("pages/debugg.py")

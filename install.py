@@ -33,7 +33,7 @@ else:
 
 print("Install is complete!" if language_choice == "1" else "설치가 완료되었습니다.")
 print(
-    "Please run the command 'python main.py' to start the program."
+    "Please run the command 'strealit run app.py' to start the program."
     if language_choice == "1"
-    else "프로그램을 시작하려면 'python main.py' 명령어를 실행해주세요."
+    else "프로그램을 시작하려면 'streamlit run app.py' 명령어를 실행해주세요."
 )
