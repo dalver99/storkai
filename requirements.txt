@@ -4,3 +4,4 @@ dotenv
 mcp
 fastmcp
 streamlit_searchbox
+finance-datareader
