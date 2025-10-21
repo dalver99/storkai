@@ -3,40 +3,27 @@ import streamlit as st
 from utils.ui import hide_sidebar, home_button
 from dotenv import load_dotenv
 from utils.sqlite import query_db_and_close
+from utils.sql_queries import favorites_query
+import datetime
 
 # import yfinance
 import plotly.graph_objects as go
 import pandas as pd
 import FinanceDataReader as fdr
 
+load_dotenv()
+language_choice = os.getenv("LANGUAGE_CHOICE")
 
-def show_chart(stock_code: str):
-    # get data from yfinance
-    import datetime
-
-    end_date = datetime.date.today()
-    start_date = end_date - datetime.timedelta(days=90)
-
-    # For Korean stocks, yfinance expects ".KS" or ".KQ" extension.
-
-    # # YF
-    # yf_code = stock_code
-    # if stock_code.isdigit() and len(stock_code) == 6:
-    #     yf_code = f"{stock_code}.KS"
-    # data = yfinance.download(
-    #     yf_code,
-    #     start=start_date,
-    #     end=end_date + datetime.timedelta(days=1),
-    #     auto_adjust=False,
-    # )
-    # print(data)
-
-    # FDR
-    fdr_code = stock_code
+def fetch_fdr_data(stock_code: str, start_date: datetime.date, end_date: datetime.date):
+    # check if stock_code is a valid stock code
+    if not stock_code.isdigit() or len(stock_code) != 6:
+        st.error("Invalid stock code" if language_choice == "1" else "유효하지 않은 종목 코드")
+        return None
     if stock_code.isdigit() and len(stock_code) == 6:
         fdr_code = f"KRX: {stock_code}"
-    data = fdr.DataReader(fdr_code, start=start_date, end=end_date)
+    return fdr.DataReader(fdr_code, start=start_date, end=end_date)
 
+def show_chart(stock_code: str, data: pd.DataFrame):
     # chart with plotly
     if data is not None and not data.empty:
         # Clean index: yfinance sometimes returns MultiIndex, ensure simple DatetimeIndex for proper plotting
@@ -77,7 +64,7 @@ def show_chart(stock_code: str):
         )
         st.plotly_chart(fig, use_container_width=True)
     else:
-        st.write("No price data available for this stock.")
+        st.write("No price data available for this stock." if language_choice == "1" else "이 종목의 가격 데이터를 찾을 수 없습니다.")
 
 
 def analyze_stock():
@@ -87,13 +74,8 @@ def analyze_stock():
     st.title("Analyze Stock" if language_choice == "1" else "주식 분석")
 
     # Show list of favorites stock as a button, which will switch the UI content
-    favorites = query_db_and_close(
-        """
-        SELECT favorite_stocks.stock_code, company_info.corp_name
-        FROM favorite_stocks
-        LEFT JOIN company_info ON favorite_stocks.stock_code = company_info.stock_code
-    """
-    )
+    #Get data
+    favorites = query_db_and_close(favorites_query)
 
     for favorite in favorites:
         if st.button(
@@ -104,7 +86,15 @@ def analyze_stock():
 
     # Now selected, show some UIs.. first lets show a chart
     if "selected_stock" in st.session_state:
-        show_chart(st.session_state.selected_stock)
+        end_date = datetime.date.today()
+        start_date = end_date - datetime.timedelta(days=90)
 
+        data = fetch_fdr_data(st.session_state.selected_stock, start_date, end_date)
+        show_chart(st.session_state.selected_stock, data)
+
+    # Then do basic analysis on data
+    # First, calculate average price change ratio of the stock for close prices
+    average_price_change_ratio = data["Close"].pct_change().mean()
+    st.write(f"Average price change ratio: {average_price_change_ratio}")
 
 analyze_stock()
