@@ -90,11 +90,16 @@ def analyze_stock():
         start_date = end_date - datetime.timedelta(days=90)
 
         data = fetch_fdr_data(st.session_state.selected_stock, start_date, end_date)
+        #wait till data arrives
         show_chart(st.session_state.selected_stock, data)
 
-    # Then do basic analysis on data
-    # First, calculate average price change ratio of the stock for close prices
-    average_price_change_ratio = data["Close"].pct_change().mean()
-    st.write(f"Average price change ratio: {average_price_change_ratio}")
+        # Then do basic analysis on data
+        # First, calculate average price change ratio of the stock for close prices, in absolute value, percentages, 
+        average_price_change_ratio = abs(data["Close"].pct_change().mean()) * 100
+        st.write(f"Average price change ratio: {average_price_change_ratio}")
+
+        # show dates where it had more than double the price change ratio
+        double_price_change_dates = data[data["Close"].pct_change() > 0.02].index
+        st.write(f"Dates: {double_price_change_dates}")
 
 analyze_stock()
